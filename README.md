@@ -91,3 +91,4 @@ php artisan test --compact
 | 6 — Admin | ⏳ | CRUD de rutas y paradas |
 | 7 — Pulido MVP | ⏳ | Responsive, estados vacíos, manejo GPS denegado |
 | **Fase 2** | ⏳ | GPS en tiempo real, ETA, transbordos, PWA offline |
+
