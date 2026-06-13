@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
+<head>
+    <meta charset="utf-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <script>
+        // To avoid flashings in the SSR because of the selected color scheme
+        const theme = localStorage.getItem('vueuse-color-scheme') || 'auto'
+        if (theme === 'dark' || (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+
+    <link
+        rel="icon"
+        href="/favicon.ico"
+        sizes="any"
+    >
+    <link
+        rel="icon"
+        href="/favicon.svg"
+        type="image/svg+xml"
+    >
+    <link
+        rel="apple-touch-icon"
+        href="/apple-touch-icon.png"
+    >
+
+    <!-- Fonts -->
+    <link
+        rel="preconnect"
+        href="https://fonts.bunny.net"
+        crossorigin
+    >
+    <link
+        href="https://fonts.bunny.net/css?family=inter:400,500,600&display=swap"
+        rel="stylesheet"
+    />
+
+    <!-- Scripts -->
+    @vite(['resources/js/app.ts', "resources/js/pages/{$page['component']}.vue"])
+    <x-inertia::head>
+        <title data-inertia>{{ config('app.name', 'Laravel') }}</title>
+    </x-inertia::head>
+</head>
+
+<body class="font-sans antialiased h-full bg-surface-100 dark:bg-surface-950">
+    <x-inertia::app />
+</body>
+
+</html>

@@ -1,0 +1,26 @@
+@import "tailwindcss";
+@import "tailwindcss-primeui";
+
+@source '../../storage/framework/views/*.php';
+@source '../../resources/views/**/*.blade.php';
+@source '../../resources/js/**/*.vue';
+@source '../../resources/js/theme/*.js';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+    --font-sans: Inter, sans-serif;
+    --header-height: 4.5rem;
+}
+
+@utility dynamic-bg {
+    @apply bg-surface-0 dark:bg-surface-900;
+}
+
+@utility dynamic-border {
+    @apply border-surface-200 dark:border-surface-800;
+}
+
+@utility delete-menu-item {
+    @apply text-red-500 dark:text-red-400 hover:bg-red-500/10 rounded-[var(--p-menu-item-border-radius)] transition-colors duration-[var(--p-menu-transition-duration)];
+}

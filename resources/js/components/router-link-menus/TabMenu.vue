@@ -1,0 +1,60 @@
+<script setup lang="ts">
+import { useTemplateRef, computed } from 'vue'
+import { Link as InertiaLink } from '@inertiajs/vue3'
+import Tabs from 'primevue/tabs'
+import Tab, { type TabsProps } from 'primevue/tabs'
+import TabList from 'primevue/tablist'
+import type { MenuItem } from '@/types'
+import { ptViewMerge } from '@/utils'
+
+interface ExtendedTabsProps extends Omit<TabsProps, 'value' | 'items'> {
+    items: MenuItem[];
+}
+const componentProps = defineProps<ExtendedTabsProps>()
+const activeRoute = computed(() => componentProps.items.find((item) => item.active)?.route ?? null)
+
+type TabsType = InstanceType<typeof Tabs>;
+const childRef = useTemplateRef<TabsType>('child-ref')
+defineExpose({ $el: childRef })
+</script>
+
+<template>
+    <Tabs
+        ref="child-ref"
+        v-bind="{ ...componentProps, ...$attrs, ptOptions: { mergeProps: ptViewMerge } }"
+        :value="activeRoute ?? ''"
+        scrollable
+    >
+        <TabList>
+            <InertiaLink
+                v-for="item in componentProps.items"
+                :key="item.route"
+                :href="item.route ?? ''"
+                :class="['p-tab no-underline', { 'p-tab-active': item.active }]"
+                custom
+            >
+                <Tab
+                    v-if="item.route"
+                    :value="item.route"
+                    :class="[
+                        'flex flex-row items-center gap-2 hover:text-color',
+                        item.class
+                    ]"
+                    :style="item.style"
+                    :aria-disabled="item.disabled === true"
+                >
+                    <i
+                        v-if="item.icon"
+                        :class="item.icon"
+                    />
+                    <component
+                        :is="item.lucideIcon"
+                        v-else-if="item.lucideIcon"
+                        :class="item.lucideIconClass"
+                    />
+                    <span>{{ item.label }}</span>
+                </Tab>
+            </InertiaLink>
+        </TabList>
+    </Tabs>
+</template>
