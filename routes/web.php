@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\RouteController;
 use App\Http\Controllers\StopController;
+use App\Http\Controllers\TransitController;
 use App\Http\Controllers\TripController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -17,6 +18,11 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+// Transit pages (Estándar — public).
+Route::get('/buscar', [TransitController::class, 'home'])->name('transit.home');
+Route::get('/rutas', [TransitController::class, 'routes'])->name('transit.routes');
+Route::get('/rutas/{route}', [TransitController::class, 'showRoute'])->name('transit.routes.show');
 
 // Transit query API (Estándar — public). Consumed by the search UI via Inertia's HTTP client.
 Route::prefix('api')->name('api.')->group(function () {

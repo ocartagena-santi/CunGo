@@ -152,7 +152,7 @@ Nivel **Estándar** funcionando con rutas reales/seeders.
 - [x] DTOs (`RouteData`, `StopData`) + factories + seeders Cancún
 - [ ] Panel admin para cargar rutas/paradas
 - [x] Buscar viaje directo (backend)
-- [ ] UI buscar + resultados + detalle de ruta
+- [x] UI buscar + resultados + detalle de ruta
 - [ ] Mapa con Leaflet + OSM (paradas y trazo)
 - [ ] Geolocation + autocomplete interno
 - [ ] Favoritos (cuenta opcional)
@@ -177,8 +177,8 @@ Cada fase deja algo **funcional y testeado** antes de pasar a la siguiente. Cons
 | **0** | Cimientos | ✅ Hecho | Proyecto listo | Instalar Leaflet + eloquent-spatial, columna `role` + helper, verificar tooling |
 | **1** | Datos + seeders | ✅ Hecho | Base poblada | Migraciones (`routes`, `stops`, `route_stop`, `route_paths`), modelos + relaciones, DTOs, factories y **seeder con rutas inventadas de Cancún** (ciudad + zona hotelera). Tests de relaciones/seeder |
 | **2** | Backend de consulta | ✅ Hecho | Lógica lista | Listar rutas, detalle, **buscar viaje directo** (servicio TripPlanner), parada más cercana (spatial), autocomplete interno. Feature tests |
-| **3** | UI pública (texto) | 🔨 En curso | Flujo usable | Inicio/buscar (GPS + AutoComplete), resultados, detalle de ruta — sin mapa aún. Smoke tests |
-| **4** | Mapas | ⏳ Pendiente | Visual | Componente mapa reusable (Leaflet + `ClientOnly`), paradas y trazo de ruta, explorar mapa. Integrado en detalle/resultados |
+| **3** | UI pública (texto) | ✅ Hecho | Flujo usable | Inicio/buscar (GPS + AutoComplete), resultados, detalle de ruta — sin mapa aún. Smoke tests |
+| **4** | Mapas | 🔨 En curso | Visual | Componente mapa reusable (Leaflet + `ClientOnly`), paradas y trazo de ruta, explorar mapa. Integrado en detalle/resultados |
 | **5** | Favoritos | ⏳ Pendiente | Cuenta opcional | Tabla `favorites`, guardar/quitar paradas y rutas, UI. Tests |
 | **6** | Admin | ⏳ Pendiente | Gestión | CRUD de rutas/paradas + ordenar paradas, sobre el dashboard existente. Tests |
 | **7** | Pulido MVP | ⏳ Pendiente | Listo para usar | Responsive móvil, estados vacíos/carga, manejo de GPS denegado, lint/pint/larastan |
@@ -200,7 +200,16 @@ Cada fase deja algo **funcional y testeado** antes de pasar a la siguiente. Cons
 
 ## 10. Próximo paso
 
-**Fase de desarrollo 3 (UI pública – texto):** páginas Vue/Inertia para buscar viaje (GPS + AutoComplete de PrimeVue consumiendo `api/stops/search` y `api/stops/nearest`), resultados de viaje (`api/trips/search`) y detalle de ruta (`api/routes/{route}`). Sin mapa todavía. Smoke tests.
+**Fase de desarrollo 4 (Mapas):** componente de mapa reusable (Leaflet + `@vue-leaflet/vue-leaflet` dentro de `ClientOnly`), dibujar paradas y trazo de ruta en el detalle, marcador de origen/destino en resultados, y página "explorar mapa".
+
+### Páginas públicas (Fase 3)
+| URI | Página | Descripción |
+|-----|--------|-------------|
+| `/buscar` | `transit/Search` | Buscar viaje: origen/destino con GPS + autocomplete, resultados inline |
+| `/rutas` | `transit/Routes` | Lista de rutas activas |
+| `/rutas/{route}` | `transit/RouteShow` | Detalle: paradas por dirección (ida/vuelta) |
+
+Layout público ligero: `layouts/TransitLayout.vue`. Componente reusable: `components/StopAutocomplete.vue` (PrimeVue AutoComplete + `useHttp`). Utilidades: `utils/transit.ts`.
 
 ### Endpoints disponibles (Fase 2)
 | Método | URI | Para qué |
