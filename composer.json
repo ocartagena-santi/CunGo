@@ -13,6 +13,7 @@
         "inertiajs/inertia-laravel": "^3.0",
         "laravel/fortify": "^1.36",
         "laravel/framework": "^13.0",
+        "matanyadaev/laravel-eloquent-spatial": "^4.8",
         "spatie/laravel-data": "^4.14",
         "spatie/laravel-typescript-transformer": "^3.0"
     },

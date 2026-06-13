@@ -2,6 +2,7 @@
 
 namespace App\Data;
 
+use App\Enums\UserRole;
 use App\Models\User;
 use Carbon\CarbonImmutable;
 use LogicException;
@@ -15,6 +16,7 @@ class UserData extends Data
         public int $id,
         public string $name,
         public string $email,
+        public UserRole $role,
         public CarbonImmutable|string|null $emailVerifiedAt,
         public CarbonImmutable|string $createdAt,
         public CarbonImmutable|string $updatedAt,
@@ -34,6 +36,7 @@ class UserData extends Data
             id: $user->id,
             name: $user->name,
             email: $user->email,
+            role: $user->role,
             emailVerifiedAt: $user->email_verified_at,
             createdAt: $createdAt,
             updatedAt: $updatedAt,
