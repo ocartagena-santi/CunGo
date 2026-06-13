@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3'
-import { Bus, Map, Search } from '@lucide/vue'
+import { Bus, Map, MapPinned, Search } from '@lucide/vue'
 import AppHead from '@/components/AppHead.vue'
 import Container from '@/components/Container.vue'
 import SelectColorModeButton from '@/components/SelectColorModeButton.vue'
@@ -16,6 +16,7 @@ const props = withDefaults(defineProps<{
 const navLinks = [
     { label: 'Buscar', href: route('transit.home'), icon: Search },
     { label: 'Rutas', href: route('transit.routes'), icon: Map },
+    { label: 'Mapa', href: route('transit.map'), icon: MapPinned },
 ]
 </script>
 

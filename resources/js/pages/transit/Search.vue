@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, defineAsyncComponent, ref } from 'vue'
 import { Link, useHttp } from '@inertiajs/vue3'
 import { useToast } from 'primevue/usetoast'
 import { ArrowDown, ArrowRightLeft, Bus, LocateFixed, Search as SearchIcon } from '@lucide/vue'
 import TransitLayout from '@/layouts/TransitLayout.vue'
 import StopAutocomplete from '@/components/StopAutocomplete.vue'
+import ClientOnly from '@/components/ClientOnly.vue'
 import { route } from '@/utils/route'
 import { directionLabel, formatFare, vehicleTypeLabel } from '@/utils/transit'
+
+const RouteMap = defineAsyncComponent(() => import('@/components/RouteMap.vue'))
 
 type Stop = App.Data.StopData
 type Trip = App.Data.DirectTripData
@@ -30,6 +33,11 @@ function asStop(value: Stop | string | null): Stop | null {
 }
 
 const canSearch = computed(() => Boolean(asStop(origin.value) && asStop(destination.value)))
+
+const firstTrip = computed<Trip | null>(() => trips.value[0] ?? null)
+const firstTripPath = computed<App.Data.LatLngData[]>(() => (
+    firstTrip.value?.segmentStops.map((s) => ({ lat: s.lat, lng: s.lng })) ?? []
+))
 
 function swap() {
     [origin.value, destination.value] = [destination.value, origin.value]
@@ -175,6 +183,20 @@ async function search() {
                 >
                     No encontramos un camión directo entre esas paradas. Por ahora solo mostramos rutas directas (sin transbordos).
                 </Message>
+
+                <div
+                    v-if="firstTrip"
+                    class="h-64 w-full rounded-lg bg-surface-100 dark:bg-surface-800"
+                >
+                    <ClientOnly>
+                        <RouteMap
+                            :stops="firstTrip.segmentStops"
+                            :path="firstTripPath"
+                            :color="firstTrip.route.color"
+                            height-class="h-64"
+                        />
+                    </ClientOnly>
+                </div>
 
                 <Card
                     v-for="(trip, index) in trips"

@@ -23,6 +23,16 @@ test('the routes page lists active routes', function () {
             ->where('routes.0.code', 'R-1'));
 });
 
+test('the explore map page renders stops and route polylines', function () {
+    $this->get(route('transit.map'))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('transit/Map')
+            ->has('stops', 13)
+            ->has('routes', 3)
+            ->has('routes.0.path'));
+});
+
 test('the route detail page renders stops per direction', function () {
     $route = Route::where('code', 'R-1')->firstOrFail();
 

@@ -36,6 +36,13 @@ stopsVuelta: App.Data.StopData[],
 pathIda: App.Data.LatLngData[],
 pathVuelta: App.Data.LatLngData[],
 };
+export type RoutePolylineData = {
+id: number,
+code: string,
+name: string,
+color: string,
+path: App.Data.LatLngData[],
+};
 export type StopData = {
 id: number,
 name: string,

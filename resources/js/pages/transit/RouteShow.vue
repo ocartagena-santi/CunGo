@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, defineAsyncComponent, ref } from 'vue'
 import { Link } from '@inertiajs/vue3'
 import { ArrowLeft, Bus, Clock, MapPin, Ticket } from '@lucide/vue'
 import TransitLayout from '@/layouts/TransitLayout.vue'
+import ClientOnly from '@/components/ClientOnly.vue'
 import { route as routeHelper } from '@/utils/route'
 import { formatFare, vehicleTypeLabel } from '@/utils/transit'
+
+const RouteMap = defineAsyncComponent(() => import('@/components/RouteMap.vue'))
 
 const props = defineProps<{
     route: App.Data.RouteDetailData,
@@ -21,6 +24,10 @@ const directionOptions = [
 
 const stops = computed(() => (
     direction.value === 'ida' ? props.route.stopsIda : props.route.stopsVuelta
+))
+
+const path = computed(() => (
+    direction.value === 'ida' ? props.route.pathIda : props.route.pathVuelta
 ))
 </script>
 
@@ -79,6 +86,16 @@ const stops = computed(() => (
                 :allow-empty="false"
                 aria-labelledby="Dirección"
             />
+
+            <div class="h-72 md:h-96 w-full rounded-lg bg-surface-100 dark:bg-surface-800">
+                <ClientOnly>
+                    <RouteMap
+                        :stops="stops"
+                        :path="path"
+                        :color="route.route.color"
+                    />
+                </ClientOnly>
+            </div>
 
             <Card>
                 <template #content>

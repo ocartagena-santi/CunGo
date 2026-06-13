@@ -153,8 +153,8 @@ Nivel **Estándar** funcionando con rutas reales/seeders.
 - [ ] Panel admin para cargar rutas/paradas
 - [x] Buscar viaje directo (backend)
 - [x] UI buscar + resultados + detalle de ruta
-- [ ] Mapa con Leaflet + OSM (paradas y trazo)
-- [ ] Geolocation + autocomplete interno
+- [x] Mapa con Leaflet + OSM (paradas y trazo)
+- [x] Geolocation + autocomplete interno
 - [ ] Favoritos (cuenta opcional)
 
 **Regla de oro:** mejor 3 rutas reales perfectas que 50 a medias.
@@ -178,8 +178,8 @@ Cada fase deja algo **funcional y testeado** antes de pasar a la siguiente. Cons
 | **1** | Datos + seeders | ✅ Hecho | Base poblada | Migraciones (`routes`, `stops`, `route_stop`, `route_paths`), modelos + relaciones, DTOs, factories y **seeder con rutas inventadas de Cancún** (ciudad + zona hotelera). Tests de relaciones/seeder |
 | **2** | Backend de consulta | ✅ Hecho | Lógica lista | Listar rutas, detalle, **buscar viaje directo** (servicio TripPlanner), parada más cercana (spatial), autocomplete interno. Feature tests |
 | **3** | UI pública (texto) | ✅ Hecho | Flujo usable | Inicio/buscar (GPS + AutoComplete), resultados, detalle de ruta — sin mapa aún. Smoke tests |
-| **4** | Mapas | 🔨 En curso | Visual | Componente mapa reusable (Leaflet + `ClientOnly`), paradas y trazo de ruta, explorar mapa. Integrado en detalle/resultados |
-| **5** | Favoritos | ⏳ Pendiente | Cuenta opcional | Tabla `favorites`, guardar/quitar paradas y rutas, UI. Tests |
+| **4** | Mapas | ✅ Hecho | Visual | Componente mapa reusable (Leaflet + `ClientOnly`), paradas y trazo de ruta, explorar mapa. Integrado en detalle/resultados |
+| **5** | Favoritos | 🔨 En curso | Cuenta opcional | Tabla `favorites`, guardar/quitar paradas y rutas, UI. Tests |
 | **6** | Admin | ⏳ Pendiente | Gestión | CRUD de rutas/paradas + ordenar paradas, sobre el dashboard existente. Tests |
 | **7** | Pulido MVP | ⏳ Pendiente | Listo para usar | Responsive móvil, estados vacíos/carga, manejo de GPS denegado, lint/pint/larastan |
 
@@ -200,16 +200,17 @@ Cada fase deja algo **funcional y testeado** antes de pasar a la siguiente. Cons
 
 ## 10. Próximo paso
 
-**Fase de desarrollo 4 (Mapas):** componente de mapa reusable (Leaflet + `@vue-leaflet/vue-leaflet` dentro de `ClientOnly`), dibujar paradas y trazo de ruta en el detalle, marcador de origen/destino en resultados, y página "explorar mapa".
+**Fase de desarrollo 5 (Favoritos):** tabla `favorites` (polimórfica o por tipo), guardar/quitar paradas y rutas con cuenta opcional, y una vista de favoritos. Tests.
 
-### Páginas públicas (Fase 3)
+### Páginas públicas (Fases 3–4)
 | URI | Página | Descripción |
 |-----|--------|-------------|
-| `/buscar` | `transit/Search` | Buscar viaje: origen/destino con GPS + autocomplete, resultados inline |
+| `/buscar` | `transit/Search` | Buscar viaje: origen/destino con GPS + autocomplete, resultados inline + mapa del tramo |
 | `/rutas` | `transit/Routes` | Lista de rutas activas |
-| `/rutas/{route}` | `transit/RouteShow` | Detalle: paradas por dirección (ida/vuelta) |
+| `/rutas/{route}` | `transit/RouteShow` | Detalle: paradas por dirección (ida/vuelta) + mapa del trazo |
+| `/mapa` | `transit/Map` | Explorar: todas las paradas y rutas dibujadas |
 
-Layout público ligero: `layouts/TransitLayout.vue`. Componente reusable: `components/StopAutocomplete.vue` (PrimeVue AutoComplete + `useHttp`). Utilidades: `utils/transit.ts`.
+Layout público: `layouts/TransitLayout.vue`. Componentes: `StopAutocomplete.vue` (PrimeVue AutoComplete + `useHttp`), `RouteMap.vue` y `ExploreMap.vue` (Leaflet, carga diferida vía `defineAsyncComponent` + `ClientOnly` para evitar SSR con `window`; marcadores con `LCircleMarker` para evitar el problema de íconos con bundlers). Utilidades: `utils/transit.ts`. DTO de polilíneas: `RoutePolylineData`.
 
 ### Endpoints disponibles (Fase 2)
 | Método | URI | Para qué |

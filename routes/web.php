@@ -22,6 +22,7 @@ Route::get('/dashboard', function () {
 // Transit pages (Estándar — public).
 Route::get('/buscar', [TransitController::class, 'home'])->name('transit.home');
 Route::get('/rutas', [TransitController::class, 'routes'])->name('transit.routes');
+Route::get('/mapa', [TransitController::class, 'map'])->name('transit.map');
 Route::get('/rutas/{route}', [TransitController::class, 'showRoute'])->name('transit.routes.show');
 
 // Transit query API (Estándar — public). Consumed by the search UI via Inertia's HTTP client.
